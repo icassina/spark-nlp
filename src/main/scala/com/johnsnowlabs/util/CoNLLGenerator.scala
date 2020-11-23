@@ -36,9 +36,7 @@ object CoNLLGenerator {
     //if data does not contain ner column, add "O" as default
     if (Try(data("finished_ner")).isFailure){
       def OArray = (len : Int) => { //create array of $len "O"s
-        var z = new Array[String](len)
-        for (i <- 0 until z.length) { z(i)="O" }
-        z
+        Array.fill(len)("0")
       }
       val makeOArray = data.sparkSession.udf.register("finished_pos", OArray)
       dfWithNER=data.withColumn("finished_ner", makeOArray(size(col("finished_pos"))))

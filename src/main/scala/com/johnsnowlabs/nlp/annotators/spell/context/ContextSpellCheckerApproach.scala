@@ -18,6 +18,7 @@ import org.apache.spark.sql.Dataset
 import org.slf4j.LoggerFactory
 import org.tensorflow.Graph
 
+import scala.collection.JavaConverters.asJavaCollectionConverter
 import scala.collection.mutable
 import scala.language.existentials
 
@@ -316,9 +317,8 @@ class ContextSpellCheckerApproach(override val uid: String) extends
   *
   * */
   private def createTransducer(vocab:List[String]) = {
-    import scala.collection.JavaConversions._
     new TransducerBuilder().
-      dictionary(vocab.sorted, true).
+      dictionary(vocab.sorted.asJavaCollection, true).
       algorithm(Algorithm.TRANSPOSITION).
       defaultMaxDistance(getOrDefault(wordMaxDistance)).
       includeDistance(true).

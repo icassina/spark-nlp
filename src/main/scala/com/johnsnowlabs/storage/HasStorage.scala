@@ -135,7 +135,7 @@ trait HasStorage extends HasStorageRef with HasExcludableStorage with HasCaseSen
 
             s3fs.copyToLocalFile(src, dst_tmp)
             // rename to original file
-            val path = Files.move(
+            Files.move(
               Paths.get(dst_tmp.toUri.getRawPath),
               Paths.get(dst.toUri.getRawPath),
               StandardCopyOption.REPLACE_EXISTING
