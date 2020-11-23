@@ -5,6 +5,8 @@ import java.io.{File, FileWriter, PrintWriter}
 import com.johnsnowlabs.util.ConfigHelper
 import org.apache.hadoop.fs.{FileSystem, Path}
 
+import scala.language.existentials
+
 
 object OutputHelper {
 

@@ -5,6 +5,8 @@ import com.johnsnowlabs.nlp.annotators.ner.Verbose
 import com.johnsnowlabs.nlp.annotators.spell.context.LangModelSentence
 import org.tensorflow.Graph
 
+import scala.language.existentials
+
 class TensorflowSpell(
   val tensorflow: TensorflowWrapper,
   val verboseLevel: Verbose.Value

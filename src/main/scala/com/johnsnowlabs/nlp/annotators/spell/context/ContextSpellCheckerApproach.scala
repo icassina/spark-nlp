@@ -3,8 +3,8 @@ package com.johnsnowlabs.nlp.annotators.spell.context
 import java.io.{BufferedWriter, File, FileWriter}
 import java.util
 
-import com.github.liblevenshtein.transducer.{Algorithm, Candidate, ITransducer}
 import com.github.liblevenshtein.transducer.factory.TransducerBuilder
+import com.github.liblevenshtein.transducer.{Algorithm, Candidate, ITransducer}
 import com.johnsnowlabs.ml.tensorflow.{TensorflowSpell, TensorflowWrapper, Variables}
 import com.johnsnowlabs.nlp.annotators.ner.Verbose
 import com.johnsnowlabs.nlp.annotators.spell.context.parser._
@@ -14,13 +14,12 @@ import org.apache.commons.io.IOUtils
 import org.apache.spark.ml.PipelineModel
 import org.apache.spark.ml.param._
 import org.apache.spark.ml.util.Identifiable
-import org.apache.spark.sql.{DataFrame, Dataset}
-import org.apache.spark.sql.catalyst.encoders.RowEncoder
+import org.apache.spark.sql.Dataset
 import org.slf4j.LoggerFactory
 import org.tensorflow.Graph
 
-import scala.collection.JavaConversions._
 import scala.collection.mutable
+import scala.language.existentials
 
 
 
@@ -334,8 +333,8 @@ class ContextSpellCheckerApproach(override val uid: String) extends
     classes:Map[Int, (Int, Int)]):Iterator[Array[LangModelSentence]] = {
 
     object DatasetIterator extends Iterator[Array[LangModelSentence]] {
-      import corpus.sparkSession.implicits._
       import com.johnsnowlabs.nlp.annotators.common.DatasetHelpers._
+      import corpus.sparkSession.implicits._
 
       // Send batches, don't collect(), only keeping a single batch in memory anytime
       val it = corpus.select(getInputCols.head)

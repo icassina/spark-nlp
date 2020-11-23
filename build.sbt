@@ -1,49 +1,46 @@
-import sbtassembly.MergeStrategy
 
 val is_gpu = System.getProperty("is_gpu","false")
 val is_spark23 = System.getProperty("is_spark23","false")
 
 val spark23Ver = "2.3.4"
-val spark24Ver = "2.4.4"
-val sparkVer = if(is_spark23=="false") spark24Ver else spark23Ver
-val scalaVer = "2.11.12"
-val scalaTestVersion = "3.0.0"
+val spark24Ver = "2.4.6"
+val sparkVer = if (is_spark23=="false") spark24Ver else spark23Ver
+val scalaVer = "2.12.12"
+val scalaTestVersion = "3.0.8"
 
 /** Package attributes */
 
 if (is_gpu.equals("true") && is_spark23.equals("true")){
-  name:="spark-nlp-gpu-spark23"
+  name := "spark-nlp-gpu-spark23"
 }else if (is_gpu.equals("true") && is_spark23.equals("false")){
-  name:="spark-nlp-gpu"
+  name := "spark-nlp-gpu"
 }else if (is_gpu.equals("false") && is_spark23.equals("true")){
-  name:="spark-nlp-spark23"
+  name := "spark-nlp-spark23"
 }else{
-  name:="spark-nlp"
+  name := "spark-nlp"
 }
 
 
 organization:= "com.johnsnowlabs.nlp"
 
-version := "2.6.3"
+version := "2.6.3.0-onedot-SNAPSHOT"
 
 scalaVersion in ThisBuild := scalaVer
 
-sparkVersion in ThisBuild := sparkVer
-
 /** Spark-Package attributes */
-spName in ThisBuild := "JohnSnowLabs/spark-nlp"
+//spName in ThisBuild := "JohnSnowLabs/spark-nlp"
 
-sparkComponents in ThisBuild ++= Seq("mllib")
+//sparkComponents in ThisBuild ++= Seq("mllib")
 
 licenses  += "Apache-2.0" -> url("http://opensource.org/licenses/Apache-2.0")
 
-spIncludeMaven in ThisBuild:= false
+//spIncludeMaven in ThisBuild:= false
 
-spAppendScalaVersion := false
+//spAppendScalaVersion := false
 
 resolvers in ThisBuild += "Maven Central" at "https://central.maven.org/maven2/"
 
-resolvers in ThisBuild += "Spring Plugins" at "http://repo.spring.io/plugins-release/"
+resolvers in ThisBuild += "Spring Plugins" at "https://repo.spring.io/plugins-release/"
 
 assemblyOption in assembly := (assemblyOption in assembly).value.copy(
   includeScala = false
@@ -51,22 +48,22 @@ assemblyOption in assembly := (assemblyOption in assembly).value.copy(
 
 credentials += Credentials(Path.userHome / ".ivy2" / ".sbtcredentials")
 
-ivyScala := ivyScala.value map {
-  _.copy(overrideScalaVersion = true)
-}
+//ivyScala := ivyScala.value map {
+//  _.copy(overrideScalaVersion = true)
+//}
 
 /** Bintray settings */
-bintrayPackageLabels := Seq("nlp", "nlu",
-  "natural-language-processing", "natural-language-understanding",
-  "spark", "spark-ml", "pyspark", "machine-learning",
-  "named-entity-recognition", "sentiment-analysis", "lemmatizer", "spell-checker",
-  "tokenizer", "stemmer", "part-of-speech-tagger", "annotation-framework")
+//bintrayPackageLabels := Seq("nlp", "nlu",
+//  "natural-language-processing", "natural-language-understanding",
+//  "spark", "spark-ml", "pyspark", "machine-learning",
+//  "named-entity-recognition", "sentiment-analysis", "lemmatizer", "spell-checker",
+//  "tokenizer", "stemmer", "part-of-speech-tagger", "annotation-framework")
+//
+//bintrayRepository := "spark-nlp"
+//
+//bintrayOrganization:= Some("johnsnowlabs")
 
-bintrayRepository := "spark-nlp"
-
-bintrayOrganization:= Some("johnsnowlabs")
-
-sonatypeProfileName := "com.johnsnowlabs"
+//sonatypeProfileName := "com.johnsnowlabs"
 
 publishTo := Some(
   if (isSnapshot.value)
@@ -103,12 +100,12 @@ scalacOptions in (Compile, doc) ++= Seq(
 target in Compile in doc := baseDirectory.value / "docs/api"
 
 lazy val analyticsDependencies =
-  if(is_spark23=="false"){
+  if (is_spark23=="false"){
     Seq(
       "org.apache.spark" %% "spark-core" % sparkVer % "provided",
       "org.apache.spark" %% "spark-mllib" % sparkVer % "provided"
     )
-  }else{
+  } else {
     Seq(
       "org.apache.spark" %% "spark-core" % spark23Ver % "provided",
       "org.apache.spark" %% "spark-mllib" % spark23Ver % "provided"
@@ -140,7 +137,6 @@ lazy val utilDependencies = Seq(
     exclude("org.apache.commons", "commons-lang3"),
   "com.navigamez" % "greex" % "1.0",
   "org.json4s" %% "json4s-ext" % "3.5.3"
-
 )
 
 
@@ -186,8 +182,22 @@ parallelExecution in Test := false
 logBuffered in Test := false
 
 scalacOptions ++= Seq(
-  "-feature",
-  "-language:implicitConversions"
+  "-deprecation",                      // Emit warning and location for usages of deprecated APIs.
+  "-encoding", "utf-8",                // Specify character encoding used by source files.
+  "-explaintypes",                     // Explain type errors in more detail.
+  "-feature",                          // Emit warning and location for usages of features that should be imported explicitly.
+  "-language:implicitConversions",     // Allow definition of implicit functions called views
+  "-unchecked",                        // Enable additional warnings where generated code depends on assumptions.
+  "-Xcheckinit",                       // Wrap field accessors to throw an exception on uninitialized access.
+  "-Xlint:type-parameter-shadow",      // A local type parameter shadows a type already in scope.
+  "-Ywarn-dead-code",                  // Warn when dead code is identified.
+  "-Ywarn-unused:implicits",           // Warn if an implicit parameter is unused.
+  "-Ywarn-unused:imports",             // Warn if an import selector is not referenced.
+  "-Ywarn-unused:locals",              // Warn if a local definition is unused.
+  "-Ywarn-unused:params",              // Warn if a value parameter is unused.
+  "-Ywarn-unused:patvars",             // Warn if a variable bound in a pattern is unused.
+  "-Ywarn-unused:privates",            // Warn if a private member is unused.
+  "-Ywarn-value-discard"               // Warn when non-Unit expression results are unused.
 )
 scalacOptions in(Compile, doc) ++= Seq(
   "-groups"
@@ -199,7 +209,7 @@ testOptions in Test += Tests.Argument("-oF")
 test in assembly := {}
 
 /** Publish test artificat **/
-publishArtifact in Test := true
+publishArtifact in Test := false
 
 /** Copies the assembled jar to the pyspark/lib dir **/
 lazy val copyAssembledJar = taskKey[Unit]("Copy assembled jar to pyspark/lib")
