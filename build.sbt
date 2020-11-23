@@ -23,7 +23,7 @@ if (is_gpu.equals("true") && is_spark23.equals("true")){
 
 organization:= "com.johnsnowlabs.nlp"
 
-version := "2.6.3.0-onedot"
+version := "2.6.3.0-onedot-SNAPSHOT"
 
 scalaVersion in ThisBuild := scalaVer
 
